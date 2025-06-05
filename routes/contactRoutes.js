@@ -1,25 +1,15 @@
 import express from 'express';
-
+import { createContacts, getContacts , getContact , updateContact , deleteContact } from '../controllers/contactControllers.js';
 const Router = express.Router();
 
-Router.get("/" , (req, res) => {
-  res.status(200).json({ message : "Get All constacts"});
-})
+Router.get("/" , (getContacts));
 
-Router.post("/" , (req, res) => {
-  res.status(200).json({ message : "Get All constacts"});
-})
+Router.post("/" , (createContacts))
 
-Router.get("/:id" , (req, res) => {
-  res.status(200).json({ message : `Get contact with id ${req.params.id}`});
-})
+Router.get("/:id" , (getContact));
 
-Router.put("/:id" , (req, res) => {
-  res.status(200).json({ message : `Update contact with id ${req.params.id}`});
-})
+Router.put("/:id" , (updateContact))
 
-Router.delete("/:id" , (req, res) => {
-  res.status(200).json({ message : `Delete contact with id ${req.params.id}`});
-})
+Router.delete("/:id" , (deleteContact))
 
 export default Router
