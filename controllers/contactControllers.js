@@ -4,7 +4,7 @@ import  Contact  from "../models/contact.Model.js";
 //@access public
 //@route GET/api/contacts
 export const getContacts = expressAsyncHandler ( async (req, res) => {
-  const contacts = await Contact.find();
+  const contacts = await Contact.find({userId: req.user.id});
   res.status(200).json(contacts);
 })
 
@@ -21,7 +21,8 @@ export const createContacts =  expressAsyncHandler (async (req , res) => {
   const contact = await Contact.create({
     name,
     email,
-    phone
+    phone,
+    userId: req.user.id
   });
   res.status(201).json(contact);
 });
@@ -47,24 +48,37 @@ export const updateContact = expressAsyncHandler (async (req , res) => {
     return res.status(404).json({message: "Contact not found"});
     throw new Error("Contact not found");
   }
+  if(contact.userId.toString() !== req.user.id){
+    return res.status(403).json({message: "User not authorized"});
+    throw new Error("User not authorized");
+  }
+
   const updatedcontact = await Contact.findByIdAndUpdate(req.params.id, req.body
     , { new: true, runValidators: true }
   )
   res.status(201).json(updatedcontact);
 });
 
-//@decs of delete a contact
-//@access public 
-//@route DELETE/api/contacts/":id"
-export const deleteContact = expressAsyncHandler (async (req, res) => {
+//@desc Delete a contact
+//@access private
+//@route DELETE /api/contacts/:id
+export const deleteContact = expressAsyncHandler(async (req, res) => {
   const contact = await Contact.findById(req.params.id);
-  if(!contact){
-    return res.status(404).json({message: "Contact not found"});
+
+  if (!contact) {
+    res.status(404);
     throw new Error("Contact not found");
   }
+
+  if (contact.userId.toString() !== req.user.id) {
+    res.status(403);
+    throw new Error("User not authorized");
+  }
+
   await Contact.findByIdAndDelete(req.params.id);
-  res.status(200).json({ message: `Delete contact with id ${req.params.id}` });
+  res.status(200).json({ message: `Deleted contact with id ${req.params.id}` });
 });
+
 
 
 
