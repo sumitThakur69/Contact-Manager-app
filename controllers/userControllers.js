@@ -1,10 +1,10 @@
 import expressAsyncHandler from "express-async-handler";
 import User from "../models/user.Model.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken"; 
 //@decs register a user
 //@access public
-//@route post/api/users/register
+//@route post/api/users/register 
 export const registerUser = expressAsyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {

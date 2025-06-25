@@ -15,7 +15,7 @@ const validateToken = expressAsyncHandler(async (req, res, next) => {
       }
 
       req.user = decoded.user; // Attach user info to request object
-      next(); // ✅ Allow request to continue
+      next(); // Allow request to continue
     });
   } else {
     res.status(401);
